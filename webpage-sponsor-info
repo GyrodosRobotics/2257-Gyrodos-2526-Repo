@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsors - Gyrodos Robotics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: linear-gradient(160deg, #ffffff 0%, #c6ddea 50%, #ffffff 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #0041a5, #2563eb);
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid #f1c232;
+        }
+
+        .header h1 {
+            font-family: 'Audiowide', cursive;
+            font-size: 3rem;
+            font-weight: normal;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #c6ddea;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-family: 'Audiowide', cursive;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #0041a5;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: normal;
+        }
+
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tier-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .tier-platinum {
+            border-color: #9333ea;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .tier-gold {
+            border-color: #f1c232;
+            background: linear-gradient(135deg, rgba(241, 194, 50, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .tier-silver {
+            border-color: #94a3b8;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .tier-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tier-platinum .tier-icon {
+            background: linear-gradient(45deg, #9333ea, #c084fc);
+        }
+
+        .tier-gold .tier-icon {
+            background: linear-gradient(45deg, #f1c232, #fbbf24);
+        }
+
+        .tier-silver .tier-icon {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1);
+        }
+
+        .tier-name {
+            font-family: 'Audiowide', cursive;
+            font-size: 1.3rem;
+            font-weight: normal;
+            margin-bottom: 8px;
+            color: #0041a5 !important;
+        }
+
+        .tier-minimum {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            color: #0041a5 !important;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tier-highlight {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.8rem;
+            color: #666 !important;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .tier-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: rgba(0, 65, 165, 0.05);
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .tier-details.expanded {
+            max-height: 500px;
+            padding: 20px;
+        }
+
+        .tier-details h4 {
+            font-family: 'Audiowide', cursive;
+            font-size: 1.1rem;
+            color: #0041a5 !important;
+            margin-bottom: 15px;
+        }
+
+        .benefits-list {
+            text-align: left;
+            color: #333 !important;
+        }
+
+        .benefits-list li {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+            color: #333 !important;
+        }
+
+        .benefits-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .click-hint {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.8rem;
+            color: #0041a5 !important;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .sponsors-section {
+            margin-bottom: 50px;
+        }
+
+        .tier-section-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 2rem;
+            font-weight: normal;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #0041a5 !important;
+        }
+
+        .sponsor-card, .placeholder-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .sponsor-card:hover, .placeholder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .gold-sponsor {
+            border-color: #f1c232;
+        }
+
+        .platinum-placeholder {
+            border-color: #9333ea;
+            border-style: dashed;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.05), rgba(255, 255, 255, 0.95));
+        }
+
+        .silver-placeholder {
+            border-color: #94a3b8;
+            border-style: dashed;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.05), rgba(255, 255, 255, 0.95));
+        }
+
+        .sponsor-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .sponsor-badge-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(45deg, #f1c232, #fbbf24);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .sponsor-badge-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1c232;
+        }
+
+        .sponsor-name {
+            font-family: 'Audiowide', cursive;
+            font-size: 1.4rem;
+            font-weight: normal;
+            color: #0041a5;
+            margin-bottom: 10px;
+        }
+
+        .sponsor-name-en {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .sponsor-contribution {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #0041a5;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .sponsor-description {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .placeholder-content h4 {
+            font-family: 'Audiowide', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #0041a5;
+        }
+
+        .placeholder-content p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .placeholder-cta {
+            font-family: 'Oswald', sans-serif;
+            background: #0041a5;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        .placeholder-cta:hover {
+            background: #f1c232;
+            color: #0041a5;
+        }
+
+        .divider {
+            font-family: 'Audiowide', cursive;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: normal;
+            color: #0041a5;
+            margin: 50px 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cta-section {
+            background: linear-gradient(45deg, #0041a5, #f1c232);
+            border-radius: 15px;
+            padding: 50px 30px;
+            text-align: center;
+            margin-top: 60px;
+            border: 3px solid #c6ddea;
+        }
+
+        .cta-section h3 {
+            font-family: 'Audiowide', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            font-weight: normal;
+            color: white;
+        }
+
+        .cta-section p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: white;
+            font-weight: 300;
+        }
+
+        .contact-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 25px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 2px solid #c6ddea;
+        }
+
+        .contact-box div {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 400;
+        }
+
+        .contact-box .small-text {
+            font-size: 0.9rem;
+            color: #c6ddea;
+            margin-top: 10px;
+            margin-bottom: 0;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .tiers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sponsor-card, .placeholder-card {
+                padding: 20px;
+            }
+            
+            .cta-section {
+                padding: 30px 20px;
+            }
+            
+            .tier-section-title {
+                color: #0041a5 !important;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>WE ARE GYRODOS. WE EXPLORE THE OCEANS.</h1>
+        <p>Diving into the future of underwater robotics with the support of our amazing sponsors</p>
+    </div>
+
+    <div class="container">
+        <!-- Current Sponsors -->
+        <h2 class="section-title">OUR SPONSORS</h2>
+
+        <!-- Platinum Sponsors -->
+        <div class="sponsors-section">
+            <h3 class="tier-section-title">
+                <span style="font-size: 2rem;">🏆</span>
+                PLATINUM SPONSORS
+            </h3>
+            
+            <div class="placeholder-card platinum-placeholder">
+                <div class="placeholder-content">
+                    <h4>Your Company Could Be Here!</h4>
+                    <p>Become our Platinum sponsor and get exclusive naming rights for one of our ROV crafts, plus all Gold and Silver benefits.</p>
+                    <a href="mailto:gyrodosrobotics@gmail.com" class="placeholder-cta">Become a Platinum Sponsor</a>
+                </div>
+            </div>
+        </div>
+            
+        <!-- Gold Sponsors -->
+        <div class="sponsors-section">
+            <h3 class="tier-section-title">
+                <span style="font-size: 2rem;">🥇</span>
+                GOLD SPONSORS
+            </h3>
+            
+            <div class="sponsor-card gold-sponsor">
+                <div class="sponsor-badge">
+                    <div class="sponsor-badge-icon">🥇</div>
+                    <div class="sponsor-badge-text">GOLD SPONSOR</div>
+                </div>
+                
+                <div class="sponsor-name">中山市三禾电子科技有限公司</div>
+                <div class="sponsor-name-en">Zhongshan Sanhe Electronic Technology Co., Ltd.</div>
+                <div class="sponsor-contribution">🏗️ Structural Materials Sponsor</div>
+                <div class="sponsor-description">
+                    Providing high-quality aluminum sheets and carbon fiber tubes for our ROV mainframe construction. 
+                    Their precision materials form the backbone of our underwater vehicle, ensuring durability and performance in challenging marine environments.
+                </div>
+            </div>
+        </div>
+
+        <!-- Silver Sponsors -->
+        <div class="sponsors-section">
+            <h3 class="tier-section-title">
+                <span style="font-size: 2rem;">⭐</span>
+                SILVER SPONSORS
+            </h3>
+            
+            <div class="placeholder-card silver-placeholder">
+                <div class="placeholder-content">
+                    <h4>Support Our Mission</h4>
+                    <p>Join our community of supporters and get your company featured on our website and final report.</p>
+                    <a href="mailto:gyrodosrobotics@gmail.com" class="placeholder-cta">Become a Silver Sponsor</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sponsorship Tiers -->
+        <h2 class="section-title">SPONSORSHIP TIERS</h2>
+        <div class="tiers-grid">
+            <div class="tier-card tier-platinum" onclick="toggleTierDetails('platinum')">
+                <div class="tier-icon">🏆</div>
+                <div class="tier-name">Platinum</div>
+                <div class="tier-minimum">HK$10,000+</div>
+                <div class="tier-highlight">Craft Naming Rights</div>
+                <div class="click-hint">Click to see all benefits</div>
+                <div class="tier-details" id="platinum-details">
+                    <h4>Platinum Benefits Include:</h4>
+                    <ul class="benefits-list">
+                        <li>Exclusive naming rights for one of our ROV crafts</li>
+                        <li>Company logo on team materials and demonstration equipment</li>
+                        <li>E-copy of all presentation materials with special acknowledgment</li>
+                        <li>E-copy of final technical report</li>
+                        <li>Premium placement on website and all documentation</li>
+                        <li>Thank-you mention in final report</li>
+                        <li>Website recognition and updates</li>
+						<li>Competition updates and progress reports</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tier-card tier-gold" onclick="toggleTierDetails('gold')">
+                <div class="tier-icon">🥇</div>
+                <div class="tier-name">Gold</div>
+                <div class="tier-minimum">HK$2,000+</div>
+                <div class="tier-highlight">Team Materials Branding</div>
+                <div class="click-hint">Click to see all benefits</div>
+                <div class="tier-details" id="gold-details">
+                    <h4>Gold Benefits Include:</h4>
+                    <ul class="benefits-list">
+                        <li>Company logo on team materials and demonstration equipment</li>
+                        <li>E-copy of final technical report</li>
+                        <li>Featured placement on website</li>
+                        <li>Thank-you mention in final report</li>
+                        <li>Website recognition</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="tier-card tier-silver" onclick="toggleTierDetails('silver')">
+                <div class="tier-icon">⭐</div>
+                <div class="tier-name">Silver</div>
+                <div class="tier-minimum">Any Amount</div>
+                <div class="tier-highlight">Website Recognition</div>
+                <div class="click-hint">Click to see all benefits</div>
+                <div class="tier-details" id="silver-details">
+                    <h4>Silver Benefits Include:</h4>
+                    <ul class="benefits-list">
+                        <li>Company name featured on sponsor list</li>
+                        <li>Thank-you mention in final technical report</li>
+                        <li>Website recognition</li>
+                        <li>Our eternal gratitude for supporting student robotics!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="divider">WE ARE GYRODOS. WE INNOVATE AND CREATE.</div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h3>Partner With Gyrodos</h3>
+            <p>
+                Join our mission to push the boundaries of underwater robotics. 
+                Your support helps us compete at the highest level while inspiring the next generation of engineers.
+            </p>
+            <div class="contact-box">
+                <div><strong>Contact us:</strong> gyrodosrobotics@gmail.com</div>
+                <div class="small-text">Multiple sponsorship tiers available • Ready to discuss custom partnerships</div>
+            </div>
+        </div>
+
+        <div class="divider">WE ARE GYRODOS. WE BUILD SOLUTIONS.</div>
+    </div>
+
+    <script>
+        function toggleTierDetails(tier) {
+            const details = document.getElementById(tier + '-details');
+            const isExpanded = details.classList.contains('expanded');
+            
+            // Close all other expanded details
+            document.querySelectorAll('.tier-details').forEach(detail => {
+                detail.classList.remove('expanded');
+            });
+            
+            // Toggle current detail if it wasn't already expanded
+            if (!isExpanded) {
+                details.classList.add('expanded');
+            }
+        }
+
+        // Close details when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.tier-card')) {
+                document.querySelectorAll('.tier-details').forEach(detail => {
+                    detail.classList.remove('expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
