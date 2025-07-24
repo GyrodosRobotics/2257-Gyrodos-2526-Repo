@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Gyrodos - We Build the Future</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: linear-gradient(160deg, #ffffff 0%, #c6ddea 30%, #ffffff 70%, #c6ddea 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .hero {
+            background: linear-gradient(45deg, #0041a5, #2563eb);
+            text-align: center;
+            padding: 80px 20px;
+            border-bottom: 4px solid #f1c232;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Audiowide', cursive;
+            font-size: 3.5rem;
+            font-weight: normal;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            height: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .animated-title {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3em;
+        }
+
+        .title-prefix {
+            position: relative;
+            z-index: 2;
+        }
+
+        .title-base-word {
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .dynamic-word-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            white-space: nowrap;
+            overflow: visible;
+            z-index: 3;
+        }
+
+        .title-word {
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: absolute;
+            left: 0;
+            top: 0;
+            white-space: nowrap;
+        }
+
+        .title-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-word.exit-up {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+
+        .hero p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #c6ddea;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Audiowide', cursive;
+            font-size: 2rem;
+            color: #f1c232;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            color: #c6ddea;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 2.5rem;
+            color: #0041a5;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .mission-statement {
+            background: linear-gradient(135deg, rgba(0, 65, 165, 0.05), rgba(198, 221, 234, 0.3));
+            border-left: 5px solid #0041a5;
+            border-radius: 0 15px 15px 0;
+            padding: 40px;
+            margin-bottom: 50px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #0041a5;
+            text-align: center;
+            position: relative;
+        }
+
+        .mission-statement::before {
+            content: '"';
+            font-size: 4rem;
+            color: #f1c232;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #c6ddea;
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 65, 165, 0.15);
+            border-color: #0041a5;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0041a5, #f1c232);
+        }
+
+        .value-icon {
+            width: 80px;
+            height: auto;
+            border-radius: 5px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        .value-content {
+            flex: 1;
+        }
+
+        .value-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 1.3rem;
+            color: #0041a5;
+            margin-bottom: 15px;
+        }
+
+        .value-description {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .principles-section {
+            background: linear-gradient(135deg, #0041a5, #2563eb);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .principles-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .principle {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .principle-number {
+            font-family: 'Audiowide', cursive;
+            font-size: 5rem;
+            color: #f1c232;
+            line-height: 1;
+            flex-shrink: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .principle-content {
+            flex: 1;
+        }
+
+        .principle-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .principle-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #c6ddea;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .team-culture {
+            text-align: center;
+            background: rgba(241, 194, 50, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            border: 2px solid #f1c232;
+        }
+
+        .culture-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 2rem;
+            color: #0041a5;
+            margin-bottom: 25px;
+        }
+
+        .culture-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .divider {
+            font-family: 'Audiowide', cursive;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #0041a5;
+            margin: 60px 0;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .principles-section {
+                padding: 30px 20px;
+            }
+            
+            .mission-statement {
+                padding: 25px;
+                font-size: 1.1rem;
+            }
+
+            .value-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .principle {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .principle-number {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>
+                <div class="animated-title">
+                    <span class="title-prefix">WE ARE</span>
+                    <div style="position: relative; display: inline-block;">
+                        <span class="title-base-word">GYRODOS</span>
+                        <div class="dynamic-word-container">
+                            <div class="title-word" id="word-designers">DESIGNERS</div>
+                            <div class="title-word" id="word-engineers">ENGINEERS</div>
+                            <div class="title-word" id="word-coders">CODERS</div>
+                            <div class="title-word" id="word-builders">BUILDERS</div>
+                            <div class="title-word" id="word-innovators">INNOVATORS</div>
+                            <div class="title-word" id="word-explorers">EXPLORERS</div>
+                            <div class="title-word" id="word-lasallians">LASALLIANS</div>
+                        </div>
+                    </div>
+                </div>
+            </h1>
+            <p>We are a group of secondary school students participating in the 2026 MATE ROV Competition, representing La Salle College in Hong Kong.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Design Principles</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Future-Ready Systems</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Mission Statement -->
+        <div class="section">
+            <div class="mission-statement">
+                At Gyrodos, we believe that brilliant ideas mean nothing without reliable execution. Our flagship Gyrodos G2.2 and Magikarp M2.2 ROV models is the core of our design, and is proof of our spirit of  iteration and creation.
+            </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="section">
+            <h2 class="section-title">WHAT DRIVES US</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613774336299110/execution.png?ex=68825cc2&is=68810b42&hm=9538c4f09ba619f47bf0fc87f8304218c1555a0b2fbab312b7c136ff00c1b64d&=&format=webp&quality=lossless&width=644&height=864" alt="Execution Icon" class="value-icon">
+                    <div class="value-content">
+                        <div class="value-title">Execution Over Ideas</div>
+                        <div class="value-description">
+                            We prototype fast, test hard, and iterate constantly. We aim for concepts to be turned into working products in 2 weeks. Done beats perfect, every single time.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613773967196361/safety.png?ex=68825cc2&is=68810b42&hm=01dd155d7090bbed2d38e04226026b9e2bc493d301e9f20b3867208fe4bcde45&=&format=webp&quality=lossless&width=698&height=864" alt="Reliability Icon" class="value-icon">
+                    <div class="value-content">
+                        <div class="value-title">Reliability is Everything</div>
+                        <div class="value-description">
+                            Every component gets water-proofed individually before integration. We expect failures, plan for them, and build systems that work when it matters most.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613773652627466/standards.png?ex=68825cc2&is=68810b42&hm=717997cbb0feaadde966fe2fa55e60a92b7c46426a484e592fb4c6213ac0e75e&=&format=webp&quality=lossless&width=872&height=864" alt="Standards Icon" class="value-icon">
+                    <div class="value-content">
+                        <div class="value-title">Standards Are King</div>
+                        <div class="value-description">
+                            Our Base Rod system, made from aluminium metal and CF, ensures every component fits together perfectly. We change faulty parts, never our proven standards. Compatibility is non-negotiable.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613771710533832/progress.png?ex=68825cc1&is=68810b41&hm=bcbcf3a2ef4688e6e7d4ca5e842c8b2e15b37a19e65a06e841beb7bdd87a59e0&=&format=webp&quality=lossless&width=900&height=864" class="value-icon">
+                    <div class="value-content">
+                        <div class="value-title">Results, Not Promises</div>
+                        <div class="value-description">
+                            Progress is counted by working proof. "It's almost done" doesn't count. We demonstrate that through live testing, especially when things fail.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Principles -->
+        <div class="section">
+            <div class="principles-section">
+                <h3 class="principles-title">THE GYRODOS DESIGN METHOD</h3>
+                <div class="principles-grid">
+                    <div class="principle">
+                        <div class="principle-number">1</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Plan → Build → Test</div>
+                            <div class="principle-text">Every subsystem follows our 5-step process: Plan, Build, Test, Document, Integrate. No shortcuts.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-number">2</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Simplicity First</div>
+                            <div class="principle-text">Make it work before making it fancy. Barebones functionality beats complex failure every time.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-number">3</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Document Everything</div>
+                            <div class="principle-text">If it's not documented with specs, diagrams, and troubleshooting guides, it doesn't exist.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-number">4</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Own Your Systems</div>
+                            <div class="principle-text">Every component has an owner who's accountable for completion, not just effort. Ownership means responsibility.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-number">5</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Fail Fast, Learn Faster</div>
+                            <div class="principle-text">We account for failures, learn from them, and build better systems. Adaptation beats perfection.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="principle">
+                        <div class="principle-number">6</div>
+                        <div class="principle-content">
+                            <div class="principle-title">Eyes On The Prize</div>
+                            <div class="principle-text">Every component's purpose is to serve our current craft. We make pragmatic featuers rather than flashy gimmicks.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider">WE ARE GYRODOS. WE EXPLORE THE OCEANS.</div>
+
+        <!-- Team Culture -->
+        <div class="section">
+            <div class="team-culture">
+                <h3 class="culture-title">HOW WE WORK TOGETHER</h3>
+                <div class="culture-text">
+                    We're proactive, accountable, and knowledge-sharing by design. Every system has a backup expert. We support each other's growth, suggest solutions instead of pointing out problems, and ensure our collective knowledge gets documented and can be passed down. Most importantly: we care for each other's imperfections while striving for technical excellence.
+                </div>
+            </div>
+        </div>
+
+        <div class="divider">WE ARE GYRODOS. WE BUILD SOLUTIONS.</div>
+    </div>
+
+    <script>
+        let animationTriggered = false;
+        const titleBaseWord = document.querySelector('.title-base-word');
+
+        function animateTitle() {
+            if (animationTriggered) return;
+            animationTriggered = true;
+
+            titleBaseWord.style.opacity = '0';
+
+            
+            // Step 1: DESIGNERS (0-1200ms)
+            setTimeout(() => {
+                document.getElementById('word-designers').classList.add('active');
+            }, 200);
+            
+            setTimeout(() => {
+                document.getElementById('word-designers').classList.add('exit-up');
+                document.getElementById('word-designers').classList.remove('active');
+            }, 1200);
+
+            // Step 2: ENGINEERS (1500-2700ms)
+            setTimeout(() => {
+                document.getElementById('word-engineers').classList.add('active');
+            }, 1500);
+            
+            setTimeout(() => {
+                document.getElementById('word-engineers').classList.add('exit-up');
+                document.getElementById('word-engineers').classList.remove('active');
+            }, 2700);
+
+            // Step 3: CODERS (3000-4200ms)
+            setTimeout(() => {
+                document.getElementById('word-coders').classList.add('active');
+            }, 3000);
+            
+            setTimeout(() => {
+                document.getElementById('word-coders').classList.add('exit-up');
+                document.getElementById('word-coders').classList.remove('active');
+            }, 4200);
+
+            // Step 4: BUILDERS (4500-5700ms)
+            setTimeout(() => {
+                document.getElementById('word-builders').classList.add('active');
+            }, 4500);
+            
+            setTimeout(() => {
+                document.getElementById('word-builders').classList.add('exit-up');
+                document.getElementById('word-builders').classList.remove('active');
+            }, 5700);
+
+            // Step 5: INNOVATORS (6000-7200ms)
+            setTimeout(() => {
+                document.getElementById('word-innovators').classList.add('active');
+            }, 6000);
+            
+            setTimeout(() => {
+                document.getElementById('word-innovators').classList.add('exit-up');
+                document.getElementById('word-innovators').classList.remove('active');
+            }, 7200);
+
+            // Step 6: EXPLORERS (7500-8700ms)
+            setTimeout(() => {
+                document.getElementById('word-explorers').classList.add('active');
+            }, 7500);
+            
+            setTimeout(() => {
+                document.getElementById('word-explorers').classList.add('exit-up');
+                document.getElementById('word-explorers').classList.remove('active');
+            }, 8700);
+
+            // Step 7: LASALLIANS (9000-10200ms) 
+            setTimeout(() => {
+                document.getElementById('word-lasallians').classList.add('active');
+            }, 9000);
+            
+            setTimeout(() => {
+                document.getElementById('word-lasallians').classList.add('exit-up');
+                document.getElementById('word-lasallians').classList.remove('active');           	   }, 10200);
+            
+            setTimeout(() => {
+
+                // Clean up all animated words
+                document.querySelectorAll('.title-word').forEach(word => {
+                    word.classList.remove('active', 'exit-up');
+                });
+                
+                // Show base word
+                titleBaseWord.style.opacity = '1';
+            }, 10500);
+        }
+
+        // Trigger animation on hover
+        document.querySelector('.hero h1').addEventListener('mouseenter', animateTitle);
+
+        // Also trigger on touch for mobile
+        document.querySelector('.hero h1').addEventListener('touchstart', animateTitle);
+    </script>
+</body>
+</html>
