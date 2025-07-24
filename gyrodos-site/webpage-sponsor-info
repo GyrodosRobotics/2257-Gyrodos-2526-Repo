@@ -576,16 +576,13 @@
         function toggleTierDetails(tier) {
             const details = document.getElementById(tier + '-details');
             const isExpanded = details.classList.contains('expanded');
-            
-            // Close all other expanded details
-            document.querySelectorAll('.tier-details').forEach(detail => {
-                detail.classList.remove('expanded');
-            });
-            
+
             // Toggle current detail if it wasn't already expanded
             if (!isExpanded) {
                 details.classList.add('expanded');
-            }
+            } else {
+				details.classList.remove('expanded');
+			}
         }
 
         // Close details when clicking outside
