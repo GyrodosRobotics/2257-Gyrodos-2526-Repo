@@ -443,7 +443,7 @@
             <h2 class="section-title">WHAT DRIVES US</h2>
             <div class="values-grid">
                 <div class="value-card">
-                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613774336299110/execution.png?ex=68825cc2&is=68810b42&hm=9538c4f09ba619f47bf0fc87f8304218c1555a0b2fbab312b7c136ff00c1b64d&=&format=webp&quality=lossless&width=644&height=864" alt="Execution Icon" class="value-icon">
+                    <img src="https://github.com/GyrodosRobotics/lucario-interface/raw/623334d9551cded2e5539f72995f5bed775c6bef/docs/execution.png" alt="Execution Icon" class="value-icon">
                     <div class="value-content">
                         <div class="value-title">Execution Over Ideas</div>
                         <div class="value-description">
@@ -453,7 +453,7 @@
                 </div>
                 
                 <div class="value-card">
-                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613773967196361/safety.png?ex=68825cc2&is=68810b42&hm=01dd155d7090bbed2d38e04226026b9e2bc493d301e9f20b3867208fe4bcde45&=&format=webp&quality=lossless&width=698&height=864" alt="Reliability Icon" class="value-icon">
+                    <img src="https://github.com/GyrodosRobotics/lucario-interface/raw/623334d9551cded2e5539f72995f5bed775c6bef/docs/progress.png" alt="Reliability Icon" class="value-icon">
                     <div class="value-content">
                         <div class="value-title">Reliability is Everything</div>
                         <div class="value-description">
@@ -463,7 +463,7 @@
                 </div>
                 
                 <div class="value-card">
-                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613773652627466/standards.png?ex=68825cc2&is=68810b42&hm=717997cbb0feaadde966fe2fa55e60a92b7c46426a484e592fb4c6213ac0e75e&=&format=webp&quality=lossless&width=872&height=864" alt="Standards Icon" class="value-icon">
+                    <img src="https://github.com/GyrodosRobotics/lucario-interface/raw/623334d9551cded2e5539f72995f5bed775c6bef/docs/safety.png" alt="Standards Icon" class="value-icon">
                     <div class="value-content">
                         <div class="value-title">Standards Are King</div>
                         <div class="value-description">
@@ -473,7 +473,7 @@
                 </div>
                 
                 <div class="value-card">
-                    <img src="https://media.discordapp.net/attachments/1397613719940235394/1397613771710533832/progress.png?ex=68825cc1&is=68810b41&hm=bcbcf3a2ef4688e6e7d4ca5e842c8b2e15b37a19e65a06e841beb7bdd87a59e0&=&format=webp&quality=lossless&width=900&height=864" class="value-icon">
+                    <img src="https://github.com/GyrodosRobotics/lucario-interface/raw/623334d9551cded2e5539f72995f5bed775c6bef/docs/standards.png" class="value-icon">
                     <div class="value-content">
                         <div class="value-title">Results, Not Promises</div>
                         <div class="value-description">
