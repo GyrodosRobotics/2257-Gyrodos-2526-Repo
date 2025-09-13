@@ -1,0 +1,4045 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LUCARIO ROV Control System</title>
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        body {
+
+            font-family: 'Courier New', monospace;
+
+            background-color: #111827;
+
+            color: white;
+
+            padding: 16px;
+
+        }
+
+
+
+        .container {
+
+            max-width: 1400px;
+
+            margin: 0 auto;
+
+        }
+
+
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 16px;
+
+            border-bottom: 1px solid #374151;
+
+            padding-bottom: 8px;
+
+        }
+
+
+
+        .header h1 {
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+            color: #60a5fa;
+
+        }
+
+
+
+        .status-bar {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+
+        }
+
+
+
+        .connection-status {
+
+            color: #10b981;
+
+        }
+
+
+
+        .connection-status.disconnected {
+
+            color: #ef4444;
+
+        }
+
+
+
+        .main-grid {
+
+            display: grid;
+
+            grid-template-columns: 2fr 1fr;
+
+            gap: 16px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+
+        .camera-feed {
+
+            background-color: black;
+
+            border: 1px solid #4b5563;
+
+            height: 400px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-direction: column;
+
+        }
+
+
+
+        .camera-icon {
+
+            font-size: 64px;
+
+            color: #6b7280;
+
+            margin-bottom: 8px;
+
+         
+
+        }
+
+
+
+        /* Advanced Controls Section */
+
+        .advanced-controls {
+
+            background-color: #1f2937;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #4b5563;
+
+            margin-top: 16px;
+
+        }
+
+
+
+        .advanced-controls h3 {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+            text-align: center;
+
+            color: #fbbf24;
+
+        }
+
+
+
+        .advanced-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 16px;
+
+        }
+
+
+
+        .control-section {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+
+
+        .control-section h4 {
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            color: #9ca3af;
+
+            margin-bottom: 4px;
+
+        }
+
+
+
+        /* Thruster Selection */
+
+        .thruster-select {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 4px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        .thruster-select-btn {
+
+            padding: 4px 8px;
+
+            border: none;
+
+            border-radius: 3px;
+
+            background-color: #374151;
+
+            color: white;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+            transition: all 0.2s;
+
+        }
+
+
+
+        .thruster-select-btn:hover {
+
+            background-color: #4b5563;
+
+        }
+
+
+
+        .thruster-select-btn.selected {
+
+            background-color: #3b82f6;
+
+            transform: scale(1.05);
+
+        }
+
+
+
+        .thruster-select-btn.inverted {
+
+            background-color: #dc2626;
+
+        }
+
+
+
+        .thruster-select-btn.powered-off {
+
+            background-color: #6b7280;
+
+            opacity: 0.6;
+
+        }
+
+
+
+
+
+        /* Action Buttons */
+
+        .thruster-actions {
+
+            display: flex;
+
+            gap: 4px;
+
+            margin-bottom: 8px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+
+        .action-btn {
+
+            padding: 4px 8px;
+
+            border: none;
+
+            border-radius: 3px;
+
+            background-color: #374151;
+
+            color: white;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+            transition: background-color 0.2s;
+
+            flex: 1;
+
+            min-width: 60px;
+
+        }
+
+
+
+        .action-btn:hover {
+
+            background-color: #4b5563;
+
+        }
+
+
+
+        .action-btn.invert {
+
+            background-color: #dc2626;
+
+        }
+
+
+
+        .action-btn.power {
+
+            background-color: #059669;
+
+        }
+
+
+
+        .action-btn:disabled {
+
+            background-color: #374151;
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+
+
+        /* Global Controls */
+
+        .global-controls {
+
+            background-color: #0f172a;
+
+            padding: 8px;
+
+            border-radius: 4px;
+
+            border: 1px solid #334155;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        .mode-control {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 6px;
+
+            font-size: 11px;
+
+        }
+
+
+
+        .toggle-switch {
+
+            position: relative;
+
+            width: 40px;
+
+            height: 20px;
+
+        }
+
+
+
+        .toggle-switch input {
+
+            opacity: 0;
+
+            width: 0;
+
+            height: 0;
+
+        }
+
+
+
+        .toggle-slider {
+
+            position: absolute;
+
+            cursor: pointer;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            bottom: 0;
+
+            background-color: #374151;
+
+            transition: 0.4s;
+
+            border-radius: 20px;
+
+        }
+
+
+
+        .toggle-slider:before {
+
+            position: absolute;
+
+            content: "";
+
+            height: 16px;
+
+            width: 16px;
+
+            left: 2px;
+
+            bottom: 2px;
+
+            background-color: white;
+
+            transition: 0.4s;
+
+            border-radius: 50%;
+
+        }
+
+
+
+        .toggle-switch input:checked + .toggle-slider {
+
+            background-color: #3b82f6;
+
+        }
+
+
+
+        .toggle-switch input:checked + .toggle-slider:before {
+
+            transform: translateX(20px);
+
+        }
+
+
+
+        .toggle-switch input:disabled + .toggle-slider {
+
+            background-color: #6b7280;
+
+            cursor: not-allowed;
+
+        }
+
+
+
+        .autostabilize-status {
+
+            color: #10b981;
+
+            font-size: 10px;
+
+            margin-left: 8px;
+
+        }
+
+
+
+        .autostabilize-status.disabled {
+
+            color: #ef4444;
+
+        }
+
+
+
+        /* Demo Controls */
+
+        .demo-controls {
+
+            background-color: #450a0a;
+
+            padding: 6px;
+
+            border-radius: 4px;
+
+            border: 1px solid #dc2626;
+
+            margin-top: 8px;
+
+        }
+
+
+
+        .demo-controls h5 {
+
+            font-size: 10px;
+
+            color: #fca5a5;
+
+            margin-bottom: 4px;
+
+        }
+
+
+
+        .inoperative-select {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 2px;
+
+        }
+
+
+
+        .inoperative-btn {
+
+            padding: 2px 4px;
+
+            border: none;
+
+            border-radius: 2px;
+
+            background-color: #7f1d1d;
+
+            color: white;
+
+            font-size: 9px;
+
+            cursor: pointer;
+
+        }
+
+
+
+        .inoperative-btn.active {
+
+            background-color: #f59e0b;
+
+            color: black;
+
+        }
+
+
+
+        .camera-controls {
+
+            display: flex;
+
+            gap: 4px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+
+        .camera-btn {
+
+            padding: 4px 8px;
+
+            border: none;
+
+            border-radius: 3px;
+
+            background-color: #374151;
+
+            color: white;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+            transition: background-color 0.2s;
+
+        }
+
+
+
+        .camera-btn:hover {
+
+            background-color: #4b5563;
+
+        }
+
+
+
+        .camera-btn.active {
+
+            background-color: #059669;
+
+        }
+
+
+
+        .measurement-section {
+
+            background-color: #0f172a;
+
+            padding: 8px;
+
+            border-radius: 4px;
+
+            border: 1px solid #334155;
+
+        }
+
+
+
+        .accel-display {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr 1fr;
+
+            gap: 8px;
+
+            margin-bottom: 8px;
+
+            font-size: 11px;
+
+        }
+
+
+
+        .accel-axis {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 2px;
+
+        }
+
+
+
+        .accel-label {
+
+            color: #9ca3af;
+
+            font-size: 10px;
+
+        }
+
+
+
+        .accel-value {
+
+            color: #06b6d4;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .measurement-controls {
+
+            display: flex;
+
+            gap: 4px;
+
+            align-items: center;
+
+        }
+
+
+
+        .measurement-btn {
+
+            padding: 4px 8px;
+
+            border: none;
+
+            border-radius: 3px;
+
+            background-color: #374151;
+
+            color: white;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+        }
+
+
+
+        .measurement-btn.start {
+
+            background-color: #059669;
+
+        }
+
+
+
+        .measurement-btn.stop {
+
+            background-color: #dc2626;
+
+        }
+
+
+
+        .measurement-btn.reset {
+
+            background-color: #6b7280;
+
+        }
+
+
+
+        .distance-display {
+
+            color: #fbbf24;
+
+            font-weight: bold;
+
+            font-size: 11px;
+
+        }
+
+
+
+        .right-panel {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 16px;
+
+        }
+
+
+
+        .instruments-row {
+
+            display: flex;
+
+            gap: 16px;
+
+        }
+
+
+
+        .instrument-panel {
+
+            background-color: #1f2937;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #4b5563;
+
+        }
+
+
+
+        .instrument-panel.small {
+
+            flex: 1;
+
+        }
+
+
+
+        .instrument-panel h3 {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+            text-align: center;
+
+        }
+
+
+
+        /* Artificial Horizon */
+
+        .horizon-container {
+
+            position: relative;
+
+            width: 200px;
+
+            height: 200px;
+
+            margin: 0 auto;
+
+        }
+
+
+
+        .horizon {
+
+            width: 160px;
+
+            height: 160px;
+
+            border-radius: 50%;
+
+            position: relative;
+
+            overflow: hidden;
+
+            margin: 20px auto;
+
+            border: 3px solid #333;
+
+            /* Remove transform from here */
+
+        }
+
+
+
+        .sky {
+
+            position: absolute;
+
+            width: 200%;          /* Much wider */
+
+            height: 200%;         /* Much taller */
+
+            background: #4a90e2;
+
+            top: -50%;           /* Start above the circle */
+
+            left: -50%;          /* Start to the left */
+
+            transform-origin: center center;  
+
+        }
+
+        .horizon-ground {
+
+            position: absolute;
+
+            width: 200%;          /* Much wider */
+
+            height: 200%;         /* Much taller */
+
+            background: #8B4513;
+
+            top: 50%;            /* Start at horizon line */
+
+            left: -50%;          /* Start to the left */
+
+            transform-origin: center center;  
+
+        }
+
+
+
+        .horizon-line {
+
+            position: absolute;
+
+            width: 200%;          /* Much wider line */
+
+            height: 2px;
+
+            background: white;
+
+            top: 50%;
+
+            left: -50%;          /* Center the wider line */
+
+            transform-origin: center center;
+
+            z-index: 5;
+
+        }
+
+
+
+        .horizon-pitch-marks {
+
+            position: absolute;
+
+            width: 160px;
+
+            height: 160px;
+
+            top: 0;
+
+            left: 0;
+
+            z-index: 20;
+
+            pointer-events: none; /* Don't interfere with other elements */
+
+        }
+
+
+
+        .pitch-line {
+
+            position: absolute;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: white;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: white;
+
+            height: 2px;
+
+            z-index: 10; /* Make sure they're above the sky/ground */
+
+        }
+
+
+
+        /* Adjust the positioning to be relative to the horizon center */
+
+        .pitch-10 { 
+
+            top: calc(50% - 24px); 
+
+            width: 60px; 
+
+        }
+
+        .pitch-20 { 
+
+            top: calc(50% - 48px); 
+
+            width: 40px; 
+
+        }
+
+        .pitch-30 { 
+
+            top: calc(50% - 72px); 
+
+            width: 60px; 
+
+        }
+
+
+
+        .pitch-minus-10 { 
+
+            top: calc(50% + 24px); 
+
+            width: 60px; 
+
+        }
+
+        .pitch-minus-20 { 
+
+            top: calc(50% + 48px); 
+
+            width: 40px; 
+
+        }
+
+        .pitch-minus-30 { 
+
+            top: calc(50% + 72px); 
+
+            width: 60px; 
+
+        }
+
+
+
+        /* Update the text positioning */
+
+        .pitch-line::after,
+
+        .pitch-line::before {
+
+            position: absolute;
+
+            top: -8px; /* Position text above the line */
+
+            font-size: 10px;
+
+            color: white;
+
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Add shadow for visibility */
+
+        }
+
+
+
+        .pitch-10::after { content: '10'; left: -25px; }
+
+        .pitch-10::before { content: '10'; right: -25px; }
+
+
+
+        .pitch-20::after { content: '20'; left: -25px; }
+
+        .pitch-20::before { content: '20'; right: -25px; }
+
+
+
+        .pitch-30::after { content: '30'; left: -25px; }
+
+        .pitch-30::before { content: '30'; right: -25px; }
+
+
+
+        .pitch-minus-10::after { content: '-10'; left: -30px; }
+
+        .pitch-minus-10::before { content: '-10'; right: -30px; }
+
+
+
+        .pitch-minus-20::after { content: '-20'; left: -30px; }
+
+        .pitch-minus-20::before { content: '-20'; right: -30px; }
+
+
+
+        .pitch-minus-30::after { content: '-30'; left: -30px; }
+
+        .pitch-minus-30::before { content: '-30'; right: -30px; }
+
+
+
+        .horizon-crosshair {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            z-index: 10;
+
+        }
+
+
+
+        .horizon-crosshair::before {
+
+            content: '';
+
+            position: absolute;
+
+            width: 40px;
+
+            height: 3px;
+
+            background: yellow;
+
+            top: -1.5px;
+
+            left: -20px;
+
+        }
+
+
+
+        .horizon-crosshair::after {
+
+            content: '';
+
+            position: absolute;
+
+            width: 3px;
+
+            height: 20px;
+
+            background: yellow;
+
+            top: -10px;
+
+            left: -1.5px;
+
+        }
+
+
+
+        /* Roll markings */
+
+        .roll-mark {
+
+            position: absolute;
+
+            top: 0px; /* Closer to the horizon circle */
+
+            left: 50%;
+
+            transform-origin: 50% 80px; /* Distance from center of horizon (80px radius + 15px spacing) */
+
+            transform: translateX(-50%);
+
+            background: white;
+
+            font-size: 10px;
+
+            text-align: center;
+
+        }
+
+
+
+        .roll-0 { 
+
+            width: 2px; 
+
+            height: 15px; 
+
+            transform: translateX(-50%) rotate(0deg);
+
+        }
+
+        .roll-0::after { 
+
+            content: '0'; 
+
+            position: absolute; 
+
+            top: -15px; 
+
+            left: -3px; 
+
+            color: white;
+
+        }
+
+
+
+        .roll-15 { 
+
+            width: 2px; 
+
+            height: 10px; 
+
+            transform: translateX(-50%) rotate(15deg);
+
+        }
+
+
+
+        .roll-minus-15 { 
+
+            width: 2px; 
+
+            height: 10px; 
+
+            transform: translateX(-50%) rotate(-15deg);
+
+        }
+
+
+
+        .roll-30 { 
+
+            width: 2px; 
+
+            height: 15px; 
+
+            transform: translateX(-50%) rotate(30deg);
+
+        }
+
+        .roll-30::after { 
+
+            content: '30'; 
+
+            position: absolute; 
+
+            top: -15px; 
+
+            left: -8px; 
+
+            color: white;
+
+        }
+
+
+
+        .roll-minus-30 { 
+
+            width: 2px; 
+
+            height: 15px; 
+
+            transform: translateX(-50%) rotate(-30deg);
+
+        }
+
+        .roll-minus-30::after { 
+
+            content: '-30'; 
+
+            position: absolute; 
+
+            top: -15px; 
+
+            left: -12px; 
+
+            color: white;
+
+        }
+
+
+
+        .roll-45 { 
+
+            width: 2px; 
+
+            height: 15px; 
+
+            transform: translateX(-50%) rotate(45deg);
+
+        }
+
+        .roll-45::after { 
+
+            content: '45'; 
+
+            position: absolute; 
+
+            top: -15px; 
+
+            left: -8px; 
+
+            color: white;
+
+        }
+
+
+
+        .roll-minus-45 { 
+
+            width: 2px; 
+
+            height: 15px; 
+
+            transform: translateX(-50%) rotate(-45deg);
+
+        }
+
+        .roll-minus-45::after { 
+
+            content: '-45'; 
+
+            position: absolute; 
+
+            top: -15px; 
+
+            left: -12px; 
+
+            color: white;
+
+        }
+
+        /* Speed and Depth Indicators */
+
+        .speed-indicator, .depth-indicator, .vertical-speed-indicator {
+
+            position: absolute;
+
+            width: 50px;
+
+            height: 160px;
+
+            background: rgba(0, 0, 0, 0.9); /* Make background more opaque */
+
+            border: 2px solid #333;
+
+            top: 20px;
+
+            overflow-y: hidden; /* Hide any content outside the box */
+
+			overflow-x: visible;
+
+            z-index: 1; /* Base layer */
+
+        }
+
+        .speed-indicator {
+
+            left: -40px; /* 80px to the LEFT of the horizon */
+
+        }
+
+
+
+        .depth-indicator {
+
+            right: -40px; /* 80px to the RIGHT of the horizon */
+
+        }
+
+
+
+        .vertical-speed-indicator {
+
+            right: -90px; /* 150px to the RIGHT of the horizon */
+
+        }
+
+
+
+        .indicator-tape {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 400px;
+
+            color: white;
+
+            font-size: 10px;
+
+            transition: transform 0.3s;
+
+            z-index: 2; /* Tape goes above background */
+
+        }
+
+
+
+        .indicator-mark {
+
+            position: absolute;
+
+            right: 10px;
+
+            height: 20px;
+
+            line-height: 20px;
+
+            z-index: 3; /* Text goes above tape */
+
+        }
+
+
+
+        /* Speed indicator (left side) - arrow points right */
+
+        .speed-indicator .indicator-arrow {
+
+            position: absolute;
+
+            top: 50%;
+
+            right: 0;
+
+            transform: translateY(-50%);
+
+            width: 0;
+
+            height: 0;
+
+            border-left: 10px solid yellow;    /* Points RIGHT */
+
+            border-top: 5px solid transparent;
+
+            border-bottom: 5px solid transparent;
+
+        }
+
+
+
+        /* Depth and Vertical Speed indicators (right side) - arrow points left */
+
+        .depth-indicator .indicator-arrow,
+
+        .vertical-speed-indicator .indicator-arrow {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 0; /* Arrow on LEFT side of bar */
+
+            transform: translateY(-50%);
+
+            width: 0;
+
+            height: 0;
+
+            border-right: 10px solid yellow;   /* Points LEFT */
+
+            border-top: 5px solid transparent;
+
+            border-bottom: 5px solid transparent;
+
+        }
+
+
+
+        /* Also flip the text alignment for right-side indicators */
+
+        .depth-indicator .indicator-mark,
+
+        .vertical-speed-indicator .indicator-mark {
+
+            position: absolute;
+
+            left: 10px; /* Text on LEFT side instead of right */
+
+            right: auto; /* Override the original right: 10px */
+
+            height: 20px;
+
+            line-height: 20px;
+
+        }
+
+
+
+        .speed-label {
+
+            position: absolute;
+
+            left: -50px; /* Same as speed-indicator left position */
+
+            bottom: 0px; /* Below the speed indicator */
+
+            width: 60px; /* Same width as indicator */
+
+            text-align: center;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: white;
+
+            z-index: 10;
+
+        }
+
+
+
+        .depth-label {
+
+            position: absolute;
+
+            right: -50px; /* Same as depth-indicator right position */
+
+            bottom: 0px; /* Below the depth indicator */
+
+            width: 60px; /* Same width as indicator */
+
+            text-align: center;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: white;
+
+            z-index: 10;
+
+        }
+
+
+
+        .vertical-speed-label {
+
+            position: absolute;
+
+            right: -90px; /* Same as vertical-speed-indicator right position */
+
+            top: 0px; /* Below the vertical speed indicator */
+
+            width: 60px; /* Same width as indicator */
+
+            text-align: center;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: white;
+
+            z-index: 10;
+
+        }
+
+
+
+        .instruments-row {
+
+            display: flex;
+
+            gap: 16px;
+
+        }
+
+
+
+        .compass {
+
+            width: 96px;
+
+            height: 96px;
+
+            background-color: black;
+
+            border-radius: 50%;
+
+            border: 2px solid #9ca3af;
+
+            position: relative;
+
+            margin: 0 auto;
+
+        }
+
+
+
+        .compass-inner {
+
+            position: absolute;
+
+            inset: 8px;
+
+            border: 1px solid #6b7280;
+
+            border-radius: 50%;
+
+        }
+
+
+
+        .compass-needle {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 50%;
+
+            width: 4px;
+
+            height: 32px;
+
+            background-color: #ef4444;
+
+            transform-origin: bottom;
+
+            transform: translateX(-50%);
+
+        }
+
+
+
+        .compass-directions {
+
+            position: absolute;
+
+            inset: 4px;
+
+            color: white;
+
+            font-size: 12px;
+
+        }
+
+
+
+        .compass-n { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); }
+
+        .compass-s { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); }
+
+        .compass-w { position: absolute; top: 50%; left: 4px; transform: translateY(-50%); }
+
+        .compass-e { position: absolute; top: 50%; right: 4px; transform: translateY(-50%); }
+
+
+
+        .compass-heading {
+
+            position: absolute;
+
+            bottom: 0;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            color: white;
+
+            font-size: 12px;
+
+        }
+
+
+
+        .env-data {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+            font-size: 14px;
+
+        }
+
+
+
+        .env-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+        }
+
+
+
+        .power-section {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        .power-bar {
+
+            flex: 1;
+
+            height: 8px;
+
+            background-color: #374151;
+
+            border-radius: 4px;
+
+        }
+
+
+
+        .power-fill {
+
+            height: 100%;
+
+            border-radius: 4px;
+
+            transition: width 0.3s;
+
+        }
+
+
+
+        .servo-indicator {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        .servo-label {
+
+            font-size: 12px;
+
+            width: 32px;
+
+        }
+
+
+
+        .servo-bar {
+
+            flex: 1;
+
+            height: 12px;
+
+            background-color: #374151;
+
+            border-radius: 4px;
+
+            position: relative;
+
+        }
+
+
+
+        .servo-fill {
+
+            height: 100%;
+
+            background-color: #10b981;
+
+            border-radius: 4px;
+
+        }
+
+
+
+        .servo-text {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .thruster-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(8, 1fr);
+
+            gap: 8px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+
+        .thruster-card {
+
+            background-color: #1f2937;
+
+            padding: 8px;
+
+            border-radius: 4px;
+
+            border: 1px solid #4b5563;
+
+            text-align: center;
+
+        }
+
+
+
+        .thruster-label {
+
+            font-size: 12px;
+
+            color: #9ca3af;
+
+        }
+
+
+
+        .thruster-value {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin: 4px 0;
+
+        }
+
+
+
+        .thruster-bar {
+
+            width: 100%;
+
+            height: 8px;
+
+            background-color: #374151;
+
+            border-radius: 4px;
+
+            position: relative;
+
+        }
+
+
+
+        .thruster-fill {
+
+            height: 100%;
+
+            border-radius: 4px;
+
+        }
+
+
+
+        .status-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 16px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+
+        .alert-panel {
+
+            background-color: #1f2937;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #4b5563;
+
+        }
+
+
+
+        .alert-panel h3 {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        .alert-content {
+
+            height: 80px;
+
+            overflow-y: auto;
+
+        }
+
+
+
+        .alert-item {
+
+            display: flex;
+
+            align-items: center;
+
+            font-size: 14px;
+
+            margin-bottom: 4px;
+
+        }
+
+
+
+        .alert-icon {
+
+            margin-right: 8px;
+
+            font-size: 16px;
+
+        }
+
+
+
+        .control-panel {
+
+            background-color: #374151;
+
+            padding: 16px;
+
+            border-radius: 8px;
+
+            border-top: 4px solid #3b82f6;
+
+        }
+
+
+
+        .control-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+            gap: 16px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+
+        .control-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+
+        .control-group label {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+
+        }
+
+
+
+        .control-group input,
+
+        .control-group select {
+
+            padding: 4px;
+
+            border-radius: 4px;
+
+            background-color: #4b5563;
+
+            color: white;
+
+            border: none;
+
+        }
+
+
+
+        .thruster-controls {
+
+            display: grid;
+
+            grid-template-columns: repeat(8, 1fr);
+
+            gap: 8px;
+
+        }
+
+
+
+        .thruster-controls input {
+
+            text-align: center;
+
+            padding: 4px;
+
+            border-radius: 4px;
+
+            background-color: #4b5563;
+
+            color: white;
+
+            border: none;
+
+        }
+
+
+
+        .positive { color: #60a5fa; }
+
+        .negative { color: #fb923c; }
+
+        .cyan { color: #06b6d4; }
+
+        .green { color: #10b981; }
+
+        .yellow { color: #eab308; }
+
+        .red { color: #ef4444; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+
+        <div class="header">
+
+            <h1>LUCARIO ROV Control System - GYRODOS ROBOTICS - DESIGNED BY KEANU</h1>
+
+            <div class="status-bar">
+
+                <div class="connection-status" id="connectionStatus">🌐 CONNECTED</div>
+
+                <div id="currentTime"></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Main Display -->
+
+        <div class="main-grid">
+
+            <div>
+
+                <div class="camera-feed">
+
+                    <div class="camera-icon">📷</div>
+
+                    <div style="color: #9ca3af;">CAMERA FEED</div>
+
+                    <div style="font-size: 14px; color: #6b7280;">1920x1080 @ 30fps</div>
+
+                </div>
+
+
+
+                <!-- Advanced Controls Section -->
+
+                <div class="advanced-controls">
+
+                    <h3>⚙️ ADVANCED CONTROLS</h3>
+
+                    <div class="advanced-grid">
+
+                        <!-- Left Column -->
+
+                        <div class="control-section">
+
+                            <!-- Thruster Selection & Actions -->
+
+                            <div>
+
+                                <h4>THRUSTER SELECT & SPECIAL ACTION</h4>
+
+                                <div class="thruster-select">
+
+                                    <button class="thruster-select-btn" data-thruster="0" id="thrusterBtn0">T1</button>
+
+                                    <button class="thruster-select-btn" data-thruster="1" id="thrusterBtn1">T2</button>
+
+                                    <button class="thruster-select-btn" data-thruster="2" id="thrusterBtn2">T3</button>
+
+                                    <button class="thruster-select-btn" data-thruster="3" id="thrusterBtn3">T4</button>
+
+                                    <button class="thruster-select-btn" data-thruster="4" id="thrusterBtn4">T5</button>
+
+                                    <button class="thruster-select-btn" data-thruster="5" id="thrusterBtn5">T6</button>
+
+                                    <button class="thruster-select-btn" data-thruster="6" id="thrusterBtn6">T7</button>
+
+                                    <button class="thruster-select-btn" data-thruster="7" id="thrusterBtn7">T8</button>
+
+                                </div>
+
+                                
+
+                                <div class="thruster-actions">
+
+                                    <button class="action-btn invert" id="invertBtn">INVERT</button>
+
+                                    <button class="action-btn power" id="powerBtn">POWER</button>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Global Controls -->
+
+                            <div class="global-controls">
+
+                                <div class="mode-control">
+
+                                    <span>False Swipe Mode:</span>
+
+                                    <label class="toggle-switch">
+
+                                        <input type="checkbox" id="falseSwipeToggle">
+
+                                        <span class="toggle-slider"></span>
+
+                                    </label>
+
+                                </div>
+
+                                
+
+                                <div class="mode-control">
+
+                                    <span>Autostabilize:</span>
+
+                                    <label class="toggle-switch">
+
+                                        <input type="checkbox" id="autostabilizeToggle" disabled>
+
+                                        <span class="toggle-slider"></span>
+
+                                    </label>
+
+                                    <span class="autostabilize-status disabled" id="autostabilizeStatus">UNAVAILABLE</span>
+
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <!-- Right Column -->
+
+                        <div class="control-section">
+
+                            <!-- Camera Controls -->
+
+                            <div>
+
+                                <h4>CAMERA SOURCE</h4>
+
+                                <div class="camera-controls">
+
+                                    <button class="camera-btn active" id="cam1Btn">CAM 1</button>
+
+                                    <button class="camera-btn" id="cam2Btn">CAM 2</button>
+
+                                    <button class="camera-btn" id="cam3Btn">CAM 3</button>
+
+                                    <button class="camera-btn" id="cam4Btn">CAM 4</button>
+
+                                    <button class="camera-btn" id="splitBtn">SPLIT</button>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Accelerometer & Distance Measurement -->
+
+                            <div>
+
+                                <h4>ACCELEROMETER & DISTANCE</h4>
+
+                                <div class="measurement-section">
+
+                                    <div class="accel-display">
+
+                                        <div class="accel-axis">
+
+                                            <div class="accel-label">X-AXIS</div>
+
+                                            <div class="accel-value" id="accelX">0.02</div>
+
+                                        </div>
+
+                                        <div class="accel-axis">
+
+                                            <div class="accel-label">Y-AXIS</div>
+
+                                            <div class="accel-value" id="accelY">-0.15</div>
+
+                                        </div>
+
+                                        <div class="accel-axis">
+
+                                            <div class="accel-label">Z-AXIS</div>
+
+                                            <div class="accel-value" id="accelZ">9.81</div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="measurement-controls">
+
+                                        <button class="measurement-btn start" id="startMeasure">START</button>
+
+                                        <button class="measurement-btn stop" id="stopMeasure">STOP</button>
+
+                                        <button class="measurement-btn reset" id="resetMeasure">RESET</button>
+
+                                        <div class="distance-display" id="distanceDisplay">0.0 cm</div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="right-panel">
+
+                <!-- Attitude and Heading Row -->
+
+             
+
+                    <div class="instrument-panel small">
+
+                        <h3>ATTITUDE</h3>
+
+                        <div class="horizon-container">
+
+                        	<div class="indicator-label speed-label">SPEED</div>
+
+                            <div class="indicator-label depth-label">DEPTH</div>
+
+                            <div class="indicator-label vertical-speed-label">VERT SPEED</div>
+
+                            <!-- Speed Indicator -->
+
+                            <div class="speed-indicator">
+
+                                <div class="indicator-tape" id="speedTape">
+
+                                    <div class="indicator-mark" style="top: 0px;">2.0</div>
+
+                                    <div class="indicator-mark" style="top: 40px;">1.5</div>
+
+                                    <div class="indicator-mark" style="top: 80px;">1.0</div>
+
+                                    <div class="indicator-mark" style="top: 120px;">0.5</div>
+
+                                    <div class="indicator-mark" style="top: 160px;">0.0</div>
+
+                                    <div class="indicator-mark" style="top: 200px;">-0.5</div>
+
+                                    <div class="indicator-mark" style="top: 240px;">-1.0</div>
+
+                                    <div class="indicator-mark" style="top: 280px;">-1.5</div>
+
+                                    <div class="indicator-mark" style="top: 320px;">-2.0</div>
+
+                                </div>
+
+                                <div class="indicator-arrow"></div>
+
+
+
+                            </div>
+
+
+
+                            <div class="horizon" id="horizon">
+
+                                <div class="sky"></div>
+
+                                <div class="horizon-ground"></div>
+
+                                <div class="horizon-line"></div>
+
+                                <div class="center-dot"></div>
+
+                                <div class="horizon-pitch-marks" id="pitchMarks">
+
+                                    <div class="pitch-line pitch-30"></div>
+
+                                    <div class="pitch-line pitch-20"></div>
+
+                                    <div class="pitch-line pitch-10"></div>
+
+                                    <div class="pitch-line pitch-minus-10"></div>
+
+                                    <div class="pitch-line pitch-minus-20"></div>
+
+                                    <div class="pitch-line pitch-minus-30"></div>
+
+                                </div>
+
+                                <div class="horizon-crosshair"></div>
+
+                            </div>
+
+
+
+                            <!-- Roll markings outside the horizon -->
+
+                            <div class="roll-marks">
+
+                                <div class="roll-mark roll-0"></div>
+
+                                <div class="roll-mark roll-15"></div>
+
+                                <div class="roll-mark roll-minus-15"></div>
+
+                                <div class="roll-mark roll-30"></div>
+
+                                <div class="roll-mark roll-minus-30"></div>
+
+                                <div class="roll-mark roll-45"></div>
+
+                                <div class="roll-mark roll-minus-45"></div>
+
+                            </div>
+
+
+
+                            <!-- Depth Indicator -->
+
+                            <div class="depth-indicator">
+
+                                <div class="indicator-tape" id="depthTape">
+
+                                    <div class="indicator-mark" style="top: 0px;">0</div>
+
+                                    <div class="indicator-mark" style="top: 40px;">50</div>
+
+                                    <div class="indicator-mark" style="top: 80px;">100</div>
+
+                                    <div class="indicator-mark" style="top: 120px;">150</div>
+
+                                    <div class="indicator-mark" style="top: 160px;">200</div>
+
+                                    <div class="indicator-mark" style="top: 200px;">250</div>
+
+                                    <div class="indicator-mark" style="top: 240px;">300</div>
+
+                                    <div class="indicator-mark" style="top: 280px;">350</div>
+
+                                    <div class="indicator-mark" style="top: 320px;">400</div>
+
+                                    <div class="indicator-mark" style="top: 360px;">450</div>
+
+                                    <div class="indicator-mark" style="top: 400px;">500</div>
+
+                                </div>
+
+                                <div class="indicator-arrow"></div>
+
+
+
+                            </div>
+
+
+
+                            <!-- Vertical Speed Indicator -->
+
+                            <div class="vertical-speed-indicator">
+
+                                <div class="indicator-tape" id="verticalSpeedTape">
+
+                                    <div class="indicator-mark" style="top: 0px;">4000</div>
+
+                                    <div class="indicator-mark" style="top: 40px;">3000</div>
+
+                                    <div class="indicator-mark" style="top: 80px;">2000</div>
+
+                                    <div class="indicator-mark" style="top: 120px;">1000</div>
+
+                                    <div class="indicator-mark" style="top: 160px;">0</div>
+
+                                    <div class="indicator-mark" style="top: 200px;">-1000</div>
+
+                                    <div class="indicator-mark" style="top: 240px;">-2000</div>
+
+                                    <div class="indicator-mark" style="top: 280px;">-3000</div>
+
+                                    <div class="indicator-mark" style="top: 320px;">-4000</div>
+
+                                </div>
+
+                                <div class="indicator-arrow"></div>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                 <!-- Environmental -->
+
+                
+
+				<div class="instruments-row">
+
+                    <div class="instrument-panel small">
+
+                        <h3>HEADING</h3>
+
+                        <div class="compass">
+
+                            <div class="compass-inner">
+
+                                <div class="compass-needle" id="compassNeedle"></div>
+
+                                <div class="compass-directions">
+
+                                    <div class="compass-n">N</div>
+
+                                    <div class="compass-s">S</div>
+
+                                    <div class="compass-w">W</div>
+
+                                    <div class="compass-e">E</div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="compass-heading" id="compassHeading">142°</div>
+
+                        </div>
+
+                    </div>
+
+             
+
+                <div class="instrument-panel small">
+
+                    <h3>ENVIRONMENTAL</h3>
+
+                    <div class="env-data">
+
+                        <div class="env-row">
+
+                            <span>Depth:</span>
+
+                            <span class="cyan" id="depth">15.2m</span>
+
+                        </div>
+
+                        <div class="env-row">
+
+                            <span>Temp:</span>
+
+                            <span class="green" id="temperature">12.4°C</span>
+
+                        </div>
+
+                        <div class="env-row">
+
+                            <span>Pressure:</span>
+
+                            <span class="yellow" id="pressure">2.52 bar</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+			</div>
+
+
+
+                <!-- Power -->
+
+                <div class="instrument-panel">
+
+                    <h3>POWER</h3>
+
+                    <div class="power-section">
+
+                        <span>⚡</span>
+
+                        <span>12V Supply:</span>
+
+                        <span class="green" id="voltage">12.3V</span>
+
+                    </div>
+
+                    <div class="power-bar">
+
+                        <div class="power-fill green" id="powerFill" style="width: 98%; background-color: #10b981;"></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Claw Servos -->
+
+                <div class="instrument-panel">
+
+                    <h3>CLAW SERVOS</h3>
+
+                    <div class="servo-indicator">
+
+                        <span class="servo-label">J1:</span>
+
+                        <div class="servo-bar">
+
+                            <div class="servo-fill" id="servo1Fill" style="width: 50%;"></div>
+
+                            <div class="servo-text" id="servo1Text">90°</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="servo-indicator">
+
+                        <span class="servo-label">J2:</span>
+
+                        <div class="servo-bar">
+
+                            <div class="servo-fill" id="servo2Fill" style="width: 25%;"></div>
+
+                            <div class="servo-text" id="servo2Text">45°</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="servo-indicator">
+
+                        <span class="servo-label">ROT:</span>
+
+                        <div class="servo-bar">
+
+                            <div class="servo-fill" id="servoRotFill" style="width: 50%;"></div>
+
+                            <div class="servo-text" id="servoRotText">180°</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="servo-indicator">
+
+                        <span class="servo-label">GRIP:</span>
+
+                        <div class="servo-bar">
+
+                            <div class="servo-fill" id="servoGripFill" style="width: 33%;"></div>
+
+                            <div class="servo-text" id="servoGripText">30°</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Thruster Status -->
+
+        <div class="thruster-grid" id="thrusterGrid">
+
+            <!-- Generated by JavaScript -->
+
+        </div>
+
+
+
+        <!-- Status Messages -->
+
+        <div class="status-grid">
+
+            <div class="alert-panel">
+
+                <h3 class="red">ALERTS</h3>
+
+                <div class="alert-content" id="alertContent">
+
+                    <!-- Alerts will be displayed here -->
+
+                </div>
+
+            </div>
+
+
+
+            <div class="alert-panel">
+
+                <h3 class="green">SYSTEM STATUS</h3>
+
+                <div class="env-data">
+
+                    <div class="env-row">
+
+                        <span>IMU:</span>
+
+                        <span class="green" id="imuStatus">NOMINAL</span>
+
+                    </div>
+
+                    <div class="env-row">
+
+                        <span>Thrusters:</span>
+
+                        <span class="green" id="thrusterStatus">8/8 ONLINE</span>
+
+                    </div>
+
+                    <div class="env-row">
+
+                        <span>Servos:</span>
+
+                        <span class="green">4/4 NOMINAL</span>
+
+                    </div>
+
+                    <div class="env-row">
+
+                        <span>Sensors:</span>
+
+                        <span class="green">ALL NOMINAL</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Control Panel -->
+
+        <div class="control-panel">
+
+            <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #60a5fa;">Test Scenario Controls</h3>
+
+            
+
+            <!-- Environmental Controls -->
+
+            <div class="control-grid">
+
+                <div class="control-group">
+
+                    <label>Depth (cm)</label>
+
+                    <input type="number" step="1" value="152" id="depthControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Speed (m/s)</label>
+
+                    <input type="number" step="0.1" min="-2" max="2" value="0.5" id="speedControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Vertical Speed (cm/min)</label>
+
+                    <input type="number" step="100" min="-6000" max="6000" value="0" id="verticalSpeedControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Temperature (°C)</label>
+
+                    <input type="number" step="0.1" value="12.4" id="tempControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Voltage (V)</label>
+
+                    <input type="number" step="0.1" value="12.3" id="voltageControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Pitch (°)</label>
+
+                    <input type="number" min="-45" max="45" value="8" id="pitchControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Roll (°)</label>
+
+                    <input type="number" min="-60" max="65" value="3" id="rollControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Heading (°)</label>
+
+                    <input type="number" min="0" max="359" value="142" id="headingControl">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Servo Controls -->
+
+            <div class="control-grid">
+
+                <div class="control-group">
+
+                    <label>Claw Joint 1 (°)</label>
+
+                    <input type="number" min="0" max="180" value="90" id="servo1Control">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Claw Joint 2 (°)</label>
+
+                    <input type="number" min="0" max="180" value="45" id="servo2Control">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Claw Rotation (°)</label>
+
+                    <input type="number" min="0" max="360" value="180" id="servoRotControl">
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Claw Grip (°)</label>
+
+                    <input type="number" min="0" max="90" value="30" id="servoGripControl">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Error Controls -->
+
+            <div class="control-grid">
+
+                <div class="control-group">
+
+                    <label>Error Type</label>
+
+                    <select id="errorControl">
+
+                        <option value="none">None</option>
+
+                        <option value="thruster-fail">Thruster Failure</option>
+
+                        <option value="low-voltage">Low Voltage</option>
+
+                        <option value="pressure-leak">Pressure Leak</option>
+
+                        <option value="tether-loss">Tether Loss</option>
+
+                        <option value="servo-jam">Servo Jam</option>
+
+                    </select>
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>Warning Type</label>
+
+                    <select id="warningControl">
+
+                        <option value="none">None</option>
+
+                        <option value="high-temp">High Temperature</option>
+
+                        <option value="voltage-drop">Voltage Fluctuation</option>
+
+                        <option value="depth-limit">Depth Limit</option>
+
+                        <option value="compass-drift">Compass Drift</option>
+
+                        <option value="servo-overload">Servo Overload</option>
+
+                    </select>
+
+                </div>
+
+                <div class="control-group">
+
+                    <label>IMU Status</label>
+
+                    <select id="imuControl">
+
+                        <option value="nominal">Nominal</option>
+
+                        <option value="degraded">Degraded</option>
+
+                        <option value="failed">Failed</option>
+
+                    </select>
+
+                </div>
+
+                                            <!-- Demo Controls -->
+
+                <div class="demo-controls">
+
+                    <h5>🔧 DEMO: THRUSTER INOPERATIVE</h5>
+
+                    <div class="inoperative-select">
+
+                        <button class="inoperative-btn" data-thruster="0">T1</button>
+
+                        <button class="inoperative-btn" data-thruster="1">T2</button>
+
+                        <button class="inoperative-btn" data-thruster="2">T3</button>
+
+                        <button class="inoperative-btn" data-thruster="3">T4</button>
+
+                        <button class="inoperative-btn" data-thruster="4">T5</button>
+
+                        <button class="inoperative-btn" data-thruster="5">T6</button>
+
+                        <button class="inoperative-btn" data-thruster="6">T7</button>
+
+                        <button class="inoperative-btn" data-thruster="7">T8</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Thruster Controls -->
+
+            <div style="margin-top: 16px;">
+
+                <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px;">Thruster Powers (-255 to +255)</label>
+
+                <div class="thruster-controls" id="thrusterControls">
+
+                    <!-- Generated by JavaScript -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        // Initial values
+
+        let thrusterValues = [198, 204, 195, 201, -12, 196, -198, 200];
+
+        let speed = 0.5;
+
+        let depth = 152;
+
+        let verticalSpeed = 0;
+
+        let measurementStartTime = null;
+
+        let measurementRunning = false;
+
+        let totalDistance = 0;
+
+        let lastVelocity = { x: 0, y: 0, z: 0 };
+
+        
+
+        // Thruster states
+
+        let selectedThruster = null;
+
+        let thrusterStates = {
+
+            powered: [true, true, true, true, true, true, true, true],
+
+            inverted: [false, false, false, false, false, false, false, false],
+
+            inoperative: [false, false, false, false, false, false, false, false]
+
+        };
+
+        
+
+        // Global modes
+
+        let falseSwipeMode = false;
+
+        let autostabilizeMode = false;
+
+        let autostabilizeInterval = null;
+
+
+
+        // Accelerometer simulation values
+
+        let accelData = { x: 0.02, y: -0.15, z: 9.81 };
+
+        let targetAttitude = { pitch: 0, roll: 0, speed: 0, verticalSpeed: 0 };
+
+
+
+        // Error and warning messages
+
+        const errors = {
+
+            'none': null,
+
+            'thruster-fail': 'THRUSTER FAILURE',
+
+            'low-voltage': 'LOW VOLTAGE WARNING',
+
+            'pressure-leak': 'PRESSURE ANOMALY DETECTED',
+
+            'tether-loss': 'TETHER CONNECTION UNSTABLE',
+
+            'servo-jam': 'CLAW SERVO JAM DETECTED'
+
+        };
+
+
+
+        const warnings = {
+
+            'none': null,
+
+            'high-temp': 'HIGH TEMPERATURE',
+
+            'voltage-drop': 'VOLTAGE FLUCTUATION',
+
+            'depth-limit': 'APPROACHING DEPTH LIMIT',
+
+            'compass-drift': 'COMPASS CALIBRATION NEEDED',
+
+            'servo-overload': 'SERVO OVERLOAD WARNING'
+
+        };
+
+
+
+        // Initialize advanced controls
+
+        function initAdvancedControls() {
+
+            // Thruster selection
+
+            document.querySelectorAll('.thruster-select-btn').forEach(btn => {
+
+                btn.addEventListener('click', () => selectThruster(parseInt(btn.dataset.thruster)));
+
+            });
+
+
+
+            // Action buttons
+
+            document.getElementById('invertBtn').addEventListener('click', toggleInvert);
+
+            document.getElementById('powerBtn').addEventListener('click', togglePower);
+
+
+
+            // Global modes
+
+            document.getElementById('falseSwipeToggle').addEventListener('change', toggleFalseSwipe);
+
+            document.getElementById('autostabilizeToggle').addEventListener('change', toggleAutostabilize);
+
+
+
+            // Demo controls
+
+            document.querySelectorAll('.inoperative-btn').forEach(btn => {
+
+                btn.addEventListener('click', () => toggleInoperative(parseInt(btn.dataset.thruster)));
+
+            });
+
+
+
+            // Camera controls
+
+            ['cam1Btn', 'cam2Btn', 'cam3Btn', 'cam4Btn', 'splitBtn'].forEach(id => {
+
+                document.getElementById(id).addEventListener('click', () => setCameraSource(id));
+
+            });
+
+
+
+            // Measurement controls
+
+            document.getElementById('startMeasure').addEventListener('click', startMeasurement);
+
+            document.getElementById('stopMeasure').addEventListener('click', stopMeasurement);
+
+            document.getElementById('resetMeasure').addEventListener('click', resetMeasurement);
+
+
+
+            // Simulate accelerometer data
+
+            setInterval(updateAccelerometer, 100);
+
+            
+
+            // Update thruster states display
+
+            updateThrusterDisplay();
+
+            updateAutostabilizeAvailability();
+
+        }
+
+
+
+        function selectThruster(index) {
+
+            selectedThruster = index;
+
+            
+
+            // Update button states
+
+            document.querySelectorAll('.thruster-select-btn').forEach((btn, i) => {
+
+                btn.classList.toggle('selected', i === index);
+
+            });
+
+            
+
+            console.log('Selected thruster:', index + 1);
+
+        }
+
+
+
+        function toggleInvert() {
+
+            if (selectedThruster === null) return;
+
+            //if (thrusterStates.inoperative[selectedThruster]) return;
+
+            
+
+            thrusterStates.inverted[selectedThruster] = !thrusterStates.inverted[selectedThruster];
+
+            updateThruster(selectedThruster, thrusterValues[selectedThruster]);
+
+            updateThrusterDisplay();
+
+            console.log(`Thruster ${selectedThruster + 1} invert:`, thrusterStates.inverted[selectedThruster]);
+
+        }
+
+
+
+        function togglePower() {
+
+            if (selectedThruster === null) return;
+
+            
+
+            thrusterStates.powered[selectedThruster] = !thrusterStates.powered[selectedThruster];
+
+            updateThruster(selectedThruster, thrusterValues[selectedThruster]);
+
+            updateThrusterDisplay();
+
+            updateAutostabilizeAvailability();
+
+            console.log(`Thruster ${selectedThruster + 1} power:`, thrusterStates.powered[selectedThruster]);
+
+        }
+
+
+
+        function toggleFalseSwipe() {
+
+            falseSwipeMode = document.getElementById('falseSwipeToggle').checked;
+
+            console.log('False Swipe Mode:', falseSwipeMode);
+
+            
+
+            // Apply power limits if enabled
+
+            if (falseSwipeMode) {
+
+                for (let i = 0; i < thrusterValues.length; i++) {
+
+                    thrusterValues[i] = Math.max(-100, Math.min(100, thrusterValues[i]));
+
+                    updateThruster(i, thrusterValues[i]);
+
+                }
+
+            }
+
+        }
+
+
+
+        function toggleAutostabilize() {
+
+            const checkbox = document.getElementById('autostabilizeToggle');
+
+            autostabilizeMode = checkbox.checked;
+
+            
+
+            if (autostabilizeMode) {
+
+                startAutostabilize();
+
+            } else {
+
+                stopAutostabilize();
+
+            }
+
+            
+
+            console.log('Autostabilize Mode:', autostabilizeMode);
+
+        }
+
+
+
+        function startAutostabilize() {
+
+            autostabilizeInterval = setInterval(() => {
+
+                // Simulate PID corrections to stabilize attitude
+
+                const currentPitch = parseInt(document.getElementById('pitchControl').value);
+
+                const currentRoll = parseInt(document.getElementById('rollControl').value);
+
+                const currentSpeed = parseFloat(document.getElementById('speedControl').value);
+
+                const currentVertSpeed = parseInt(document.getElementById('verticalSpeedControl').value);
+
+                
+
+                // Apply small corrections toward zero
+
+                const pitchCorrection = -currentPitch * 0.1;
+
+                const rollCorrection = -currentRoll * 0.1;
+
+                const speedCorrection = -currentSpeed * 0.05;
+
+                const vertSpeedCorrection = -currentVertSpeed * 0.02;
+
+                
+
+                // Update values gradually
+
+                document.getElementById('pitchControl').value = Math.round(currentPitch + pitchCorrection);
+
+                document.getElementById('rollControl').value = Math.round(currentRoll + rollCorrection);
+
+                document.getElementById('speedControl').value = (currentSpeed + speedCorrection).toFixed(1);
+
+                document.getElementById('verticalSpeedControl').value = Math.round(currentVertSpeed + vertSpeedCorrection);
+
+                
+
+                // Make small random thruster adjustments
+
+                for (let i = 0; i < 8; i++) {
+
+                    if (thrusterStates.powered[i] && !thrusterStates.inoperative[i]) {
+
+                        const adjustment = (Math.random() - 0.5) * 10;
+
+                        const newValue = Math.max(-255, Math.min(255, thrusterValues[i] + adjustment));
+
+                        updateThruster(i, Math.round(newValue));
+
+                    }
+
+                }
+
+                
+
+                updateDisplay();
+
+            }, 200);
+
+        }
+
+
+
+        function stopAutostabilize() {
+
+            if (autostabilizeInterval) {
+
+                clearInterval(autostabilizeInterval);
+
+                autostabilizeInterval = null;
+
+            }
+
+        }
+
+
+
+        function toggleInoperative(index) {
+
+            thrusterStates.inoperative[index] = !thrusterStates.inoperative[index];
+
+            
+
+            // Update demo button
+
+            const btn = document.querySelector(`[data-thruster="${index}"].inoperative-btn`);
+
+            btn.classList.toggle('active', thrusterStates.inoperative[index]);
+
+            
+
+            updateThrusterDisplay();
+
+            updateAutostabilizeAvailability();
+
+            console.log(`Thruster ${index + 1} inoperative:`, thrusterStates.inoperative[index]);
+
+        }
+
+
+
+        function updateThrusterDisplay() {
+
+            document.querySelectorAll('.thruster-select-btn').forEach((btn, i) => {
+
+                btn.classList.toggle('inverted', thrusterStates.inverted[i]);
+
+                btn.classList.toggle('powered-off', !thrusterStates.powered[i]);
+
+                //btn.classList.toggle('inoperative', thrusterStates.inoperative[i]);
+
+            });
+
+            
+
+            // Update thruster status count
+
+            const poweredCount = thrusterStates.powered.filter(p => p).length;
+
+            document.getElementById('thrusterStatus').textContent = `${poweredCount}/8 ONLINE`;
+
+            document.getElementById('thrusterStatus').className = poweredCount === 8 ? 'green' : 'yellow';
+
+        }
+
+
+
+        function updateAutostabilizeAvailability() {
+
+            const allPowered = thrusterStates.powered.every(p => p);
+
+            const checkbox = document.getElementById('autostabilizeToggle');
+
+            const status = document.getElementById('autostabilizeStatus');
+
+            
+
+            checkbox.disabled = !allPowered;
+
+            
+
+            if (!allPowered && autostabilizeMode) {
+
+                checkbox.checked = false;
+
+                toggleAutostabilize();
+
+            }
+
+            
+
+            status.textContent = allPowered ? 'AVAILABLE' : 'UNAVAILABLE';
+
+            status.className = allPowered ? 'autostabilize-status' : 'autostabilize-status disabled';
+
+        }
+
+
+
+        function setCameraSource(buttonId) {
+
+            // Remove active class from all camera buttons
+
+            ['cam1Btn', 'cam2Btn', 'cam3Btn', 'cam4Btn', 'splitBtn'].forEach(id => {
+
+                document.getElementById(id).classList.remove('active');
+
+            });
+
+            
+
+            // Add active class to clicked button
+
+            document.getElementById(buttonId).classList.add('active');
+
+            
+
+            console.log('Camera source changed to:', buttonId);
+
+        }
+
+
+
+        function startMeasurement() {
+
+            if (!measurementRunning) {
+
+                measurementStartTime = Date.now();
+
+                measurementRunning = true;
+
+                totalDistance = 0;
+
+                lastVelocity = { x: 0, y: 0, z: 0 };
+
+                console.log('Measurement started');
+
+            }
+
+        }
+
+
+
+        function stopMeasurement() {
+
+            measurementRunning = false;
+
+            console.log('Measurement stopped at:', totalDistance.toFixed(2), 'cm');
+
+        }
+
+
+
+        function resetMeasurement() {
+
+            measurementRunning = false;
+
+            measurementStartTime = null;
+
+            totalDistance = 0;
+
+            lastVelocity = { x: 0, y: 0, z: 0 };
+
+            document.getElementById('distanceDisplay').textContent = '0.0 cm';
+
+            console.log('Measurement reset');
+
+        }
+
+
+
+        function updateAccelerometer() {
+
+            // Simulate realistic accelerometer data with some noise
+
+            accelData.x = (Math.random() - 0.5) * 0.2 + (speed * 0.3);
+
+            accelData.y = (Math.random() - 0.5) * 0.15;
+
+            accelData.z = 9.81 + (Math.random() - 0.5) * 0.1;
+
+
+
+            // Update display
+
+            document.getElementById('accelX').textContent = accelData.x.toFixed(2);
+
+            document.getElementById('accelY').textContent = accelData.y.toFixed(2);
+
+            document.getElementById('accelZ').textContent = accelData.z.toFixed(2);
+
+
+
+            // Update distance measurement if running
+
+            if (measurementRunning && measurementStartTime) {
+
+                const deltaTime = 0.1; // 100ms intervals
+
+                
+
+                // Simple integration for distance (this is simplified)
+
+                const deltaVx = accelData.x * deltaTime;
+
+                const deltaVy = accelData.y * deltaTime;
+
+                
+
+                lastVelocity.x += deltaVx;
+
+                lastVelocity.y += deltaVy;
+
+                
+
+                const distanceDelta = Math.sqrt(
+
+                    Math.pow(lastVelocity.x * deltaTime * 100, 2) + 
+
+                    Math.pow(lastVelocity.y * deltaTime * 100, 2)
+
+                );
+
+                
+
+                totalDistance += distanceDelta;
+
+                document.getElementById('distanceDisplay').textContent = totalDistance.toFixed(1) + ' cm';
+
+            }
+
+        }
+
+
+
+        // Initialize thruster display
+
+        function initThrusters() {
+
+            const thrusterGrid = document.getElementById('thrusterGrid');
+
+            const thrusterControls = document.getElementById('thrusterControls');
+
+            
+
+            thrusterGrid.innerHTML = '';
+
+            thrusterControls.innerHTML = '';
+
+
+
+            for (let i = 0; i < 8; i++) {
+
+                // Display
+
+                const card = document.createElement('div');
+
+                card.className = 'thruster-card';
+
+                card.innerHTML = `
+
+                    <div class="thruster-label">T${i + 1}</div>
+
+                    <div class="thruster-value ${thrusterValues[i] >= 0 ? 'positive' : 'negative'}" id="thruster${i}Value">
+
+                        ${thrusterValues[i] >= 0 ? '+' : ''}${thrusterValues[i]}
+
+                    </div>
+
+                    <div class="thruster-bar">
+
+                        <div class="thruster-fill" id="thruster${i}Fill" style="
+
+                            width: ${Math.abs(thrusterValues[i] / 255) * 100}%;
+
+                            background-color: ${thrusterValues[i] >= 0 ? '#3b82f6' : '#fb923c'};
+
+                            ${thrusterValues[i] < 0 ? `margin-left: ${100 - Math.abs(thrusterValues[i] / 255) * 100}%;` : ''}
+
+                        "></div>
+
+                    </div>
+
+                `;
+
+                thrusterGrid.appendChild(card);
+
+
+
+                // Control
+
+                const input = document.createElement('input');
+
+                input.type = 'number';
+
+                input.min = '-255';
+
+                input.max = '255';
+
+                input.value = thrusterValues[i];
+
+                input.placeholder = `T${i + 1}`;
+
+                input.addEventListener('input', (e) => updateThruster(i, parseInt(e.target.value) || 0));
+
+                thrusterControls.appendChild(input);
+
+            }
+
+        }
+
+
+
+        function updateThruster(index, value) {
+
+            // Apply false swipe mode limits
+
+            if (falseSwipeMode) {
+
+                value = Math.max(-100, Math.min(100, value));
+
+            }
+
+            
+
+            // Apply inversion if enabled and not inoperative
+
+            if (thrusterStates.inverted[index] && !thrusterStates.inoperative[index]) {
+
+                value = -value;
+
+            }
+
+			if (!thrusterStates.powered[index]) {
+
+        		value = 0;
+
+            }
+
+            
+
+            thrusterValues[index] = value;
+
+            const valueEl = document.getElementById(`thruster${index}Value`);
+
+            const fillEl = document.getElementById(`thruster${index}Fill`);
+
+            
+
+            valueEl.textContent = (value >= 0 ? '+' : '') + value;
+
+            valueEl.className = `thruster-value ${value >= 0 ? 'positive' : 'negative'}`;
+
+            
+
+            fillEl.style.width = `${Math.abs(value / 255) * 100}%`;
+
+            fillEl.style.backgroundColor = value >= 0 ? '#3b82f6' : '#fb923c';
+
+            fillEl.style.marginLeft = value < 0 ? `${100 - Math.abs(value / 255) * 100}%` : '0';
+
+            
+
+            // Update corresponding input
+
+            const input = document.querySelectorAll('.thruster-controls input')[index];
+
+            if (input) input.value = value;
+
+        }
+
+
+
+        function updateAlerts() {
+
+            const alertContent = document.getElementById('alertContent');
+
+            const errorType = document.getElementById('errorControl').value;
+
+            const warningType = document.getElementById('warningControl').value;
+
+            
+
+            alertContent.innerHTML = '';
+
+            
+
+            if (errors[errorType]) {
+
+                const errorDiv = document.createElement('div');
+
+                errorDiv.className = 'alert-item red';
+
+                errorDiv.innerHTML = `<span class="alert-icon">⚠️</span>${errors[errorType]}`;
+
+                alertContent.appendChild(errorDiv);
+
+            }
+
+            
+
+            if (warnings[warningType]) {
+
+                const warningDiv = document.createElement('div');
+
+                warningDiv.className = 'alert-item yellow';
+
+                warningDiv.innerHTML = `<span class="alert-icon">⚠️</span>${warnings[warningType]}`;
+
+                alertContent.appendChild(warningDiv);
+
+            }
+
+        }
+
+
+
+        function updateIndicatorTapes() {
+
+            const centerPosition = 80; // 80px from top is center of 160px tall indicator
+
+
+
+            // Speed: -2 to +2 range, 40px per 0.5 units = 80px per unit
+
+            const speedTape = document.getElementById('speedTape');
+
+            const speedOffset = centerPosition - (speed * -80) - 170; // 80px per 1.0 unit
+
+            speedTape.style.transform = `translateY(${speedOffset}px)`;
+
+
+
+            // Depth: 0 to 500 range, marks every 50 units at 40px spacing
+
+            const depthTape = document.getElementById('depthTape');
+
+            const depthOffset = centerPosition - (depth * 0.8) - 12 ; // 0.8px per cm (40px per 50cm)
+
+            depthTape.style.transform = `translateY(${depthOffset}px)`;
+
+
+
+            // Vertical Speed: -6000 to +6000 range, marks every 1000 units at 40px spacing  
+
+            const verticalSpeedTape = document.getElementById('verticalSpeedTape');
+
+            const verticalSpeedOffset = centerPosition - (verticalSpeed * -0.04) - 172; // 0.04px per cm/min (40px per 1000)
+
+            verticalSpeedTape.style.transform = `translateY(${verticalSpeedOffset}px)`;
+
+        }
+
+
+
+        function updateDisplay() {
+
+            // Update time
+
+            document.getElementById('currentTime').textContent = new Date().toLocaleTimeString();
+
+            
+
+            // Get control values
+
+            speed = parseFloat(document.getElementById('speedControl').value);
+
+            depth = parseInt(document.getElementById('depthControl').value);
+
+            verticalSpeed = parseInt(document.getElementById('verticalSpeedControl').value);
+
+            
+
+            // Update environmental data
+
+            document.getElementById('depth').textContent = (depth / 100).toFixed(1) + 'm';
+
+            document.getElementById('temperature').textContent = document.getElementById('tempControl').value + '°C';
+
+            document.getElementById('pressure').textContent = (depth * 0.01 + 1).toFixed(2) + ' bar';
+
+            
+
+            // Update voltage
+
+            const voltage = parseFloat(document.getElementById('voltageControl').value);
+
+            document.getElementById('voltage').textContent = voltage + 'V';
+
+            document.getElementById('voltage').className = voltage > 11.5 ? 'green' : 'red';
+
+            document.getElementById('powerFill').style.width = `${Math.min((voltage / 12.5) * 100, 100)}%`;
+
+            document.getElementById('powerFill').style.backgroundColor = voltage > 11.5 ? '#10b981' : '#ef4444';
+
+            
+
+            // Update attitude
+
+            const pitch = parseInt(document.getElementById('pitchControl').value);
+
+            const roll = parseInt(document.getElementById('rollControl').value);
+
+             updateHorizon(pitch, roll);
+
+            
+
+            // Ground positioning (start from center at 0 pitch)
+
+            document.getElementById('pitchMarks').style.transform = `translateY(${pitch * 2.4}px) rotate(${roll}deg)`;
+
+            
+
+            // Update heading
+
+            const heading = parseInt(document.getElementById('headingControl').value);
+
+            document.getElementById('compassHeading').textContent = heading + '°';
+
+            document.getElementById('compassNeedle').style.transform = `translate(-50%, 0) rotate(${heading}deg)`;
+
+            
+
+            // Update servos
+
+            const servo1 = parseInt(document.getElementById('servo1Control').value);
+
+            const servo2 = parseInt(document.getElementById('servo2Control').value);
+
+            const servoRot = parseInt(document.getElementById('servoRotControl').value);
+
+            const servoGrip = parseInt(document.getElementById('servoGripControl').value);
+
+            
+
+            document.getElementById('servo1Fill').style.width = `${(servo1 / 180) * 100}%`;
+
+            document.getElementById('servo1Text').textContent = servo1 + '°';
+
+            document.getElementById('servo2Fill').style.width = `${(servo2 / 180) * 100}%`;
+
+            document.getElementById('servo2Text').textContent = servo2 + '°';
+
+            document.getElementById('servoRotFill').style.width = `${(servoRot / 360) * 100}%`;
+
+            document.getElementById('servoRotText').textContent = servoRot + '°';
+
+            document.getElementById('servoGripFill').style.width = `${(servoGrip / 90) * 100}%`;
+
+            document.getElementById('servoGripText').textContent = servoGrip + '°';
+
+            
+
+            // Update IMU status
+
+            const imuStatus = document.getElementById('imuControl').value;
+
+            const imuEl = document.getElementById('imuStatus');
+
+            imuEl.textContent = imuStatus.toUpperCase();
+
+            imuEl.className = imuStatus === 'nominal' ? 'green' : 'red';
+
+
+
+            // Update indicator tapes
+
+            updateIndicatorTapes();
+
+        }
+
+
+
+        // Event listeners
+
+        document.getElementById('errorControl').addEventListener('change', updateAlerts);
+
+        document.getElementById('warningControl').addEventListener('change', updateAlerts);
+
+        
+
+        // Add event listeners to all controls
+
+        ['depthControl', 'speedControl', 'verticalSpeedControl', 'tempControl', 'voltageControl', 
+
+         'pitchControl', 'rollControl', 'headingControl', 'servo1Control', 'servo2Control', 
+
+         'servoRotControl', 'servoGripControl', 'imuControl'].forEach(id => {
+
+            document.getElementById(id).addEventListener('input', updateDisplay);
+
+        });
+
+
+
+        function updateHorizon(pitch, roll) {
+
+            const horizon = document.querySelector('.horizon');
+
+
+
+            // Create a container for sky/ground if it doesn't exist
+
+            let horizonContainer = document.querySelector('.horizon-inner-container');
+
+            if (!horizonContainer) {
+
+                horizonContainer = document.createElement('div');
+
+                horizonContainer.className = 'horizon-inner-container';
+
+                horizonContainer.style.position = 'absolute';
+
+                horizonContainer.style.width = '200%';
+
+                horizonContainer.style.height = '200%';
+
+                horizonContainer.style.top = '-50%';
+
+                horizonContainer.style.left = '-50%';
+
+
+
+                // Move sky, ground, and line into this container
+
+                const sky = document.querySelector('.sky');
+
+                const ground = document.querySelector('.horizon-ground');
+
+                const line = document.querySelector('.horizon-line');
+
+
+
+                horizonContainer.appendChild(sky);
+
+                horizonContainer.appendChild(ground);
+
+                horizonContainer.appendChild(line);
+
+                horizon.appendChild(horizonContainer);
+
+
+
+                // Reset their positions relative to the container
+
+                sky.style.top = '0';
+
+                sky.style.left = '0';
+
+                sky.style.width = '100%';
+
+                sky.style.height = '50%';
+
+
+
+                ground.style.top = '50%';
+
+                ground.style.left = '0';
+
+                ground.style.width = '100%';
+
+                ground.style.height = '50%';
+
+
+
+                line.style.top = '50%';
+
+                line.style.left = '0';
+
+                line.style.width = '100%';
+
+                line.style.transform = 'translateY(-50%)';
+
+            }
+
+
+
+            // Apply the transformation to the container
+
+            const pitchOffset = pitch * 2.4;
+
+            horizonContainer.style.transform = `translateY(${pitchOffset}px) rotate(${roll}deg)`;
+
+
+
+            // Update pitch marks - they should only rotate, not translate with pitch
+
+            const pitchMarks = document.getElementById('pitchMarks');
+
+            if (pitchMarks) {
+
+                // Move pitch marks to be a direct child of horizon if not already
+
+                if (pitchMarks.parentElement !== horizon) {
+
+                    horizon.appendChild(pitchMarks);
+
+                }
+
+
+
+                // Only apply roll rotation - no pitch translation
+
+                pitchMarks.style.transform = `rotate(${roll}deg)`;
+
+                pitchMarks.style.zIndex = '20';
+
+            }
+
+        }
+
+
+
+        // Initialize
+
+        initThrusters();
+
+        initAdvancedControls();
+
+        updateDisplay();
+
+        updateAlerts();
+
+        
+
+        // Update time every second
+
+        setInterval(() => {
+
+            document.getElementById('currentTime').textContent = new Date().toLocaleTimeString();
+
+        }, 1000);
+
+    </script>
+
+</body>
+
+</html>
