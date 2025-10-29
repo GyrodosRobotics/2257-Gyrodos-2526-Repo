@@ -7,9 +7,8 @@ OVERVIEW
 Lapras is Gyrodos Robotics' first ROV model of 2025-26. 
 Its Gyrodos development code is 2231, and all files related to the development of Lapras will have the 2231 prefix.
 It is
-Currently, Milotic is equipped with the following additional components:
-- 4x 360° Waterproof Cameras
-- 1x PoE Camera
+Currently, Lapras is equipped with the following additional components:
+- None
 
 TECHNICAL SPECIFICATIONS
 ------------------------
@@ -27,3 +26,7 @@ ME
 2231-panel-diagram (Geogebra side view of craft)
 EE
 None (non-powered)
+
+==========================
+Admin Note: As Lapras has already been completed, its documentation is officially ARCHIVED and no more files or amendments shall be made to it.
+Effective 30 OCT 2025.
