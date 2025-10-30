@@ -10,6 +10,8 @@ Its special 8-thruster layout offers up to 33% higher efficiency when moving for
 Currently, Milotic is equipped with the following additional components:
 - 4x 360° Waterproof Cameras
 - 1x PoE Camera
+- SpiRob Flexible Claw
+- Dragon (Main) Claw
 
 TECHNICAL SPECIFICATIONS
 ------------------------
@@ -17,14 +19,14 @@ Size: 560 * 480 * 420 mm
 Weight: TBD
 Materials: Aluminium, Acrylic
 Tether Range: 18m
-Latest supported LUCARIO System version: 1.0.0
+Latest supported LUCARIO System version: Not yet implemented
 Power: 12V DC
-FLA: TBD
+FLA: TBD (Maximum 25 A)
 
 FILES CURRENTLY DOCUMENTED
 --------------------------
 ME
-2232-Gyrodos Assembly File: The full model draft of Milotic.
+2232-Milotic Assembly File: The full model draft of Milotic. (Latest Version: 11 Oct 2025)
 2232-31 by 3.0 connector: a 310mm by 30mm connector.
 2232-48 by 2.0 connector: a 480mm by 20mm connector.
 2232-48 by 2.5 connector: a 480mm by 25mm connector.
