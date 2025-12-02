@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "lucario-interface": "github:GyrodosRobotics/lucario-interface#main"
+  }
+}
